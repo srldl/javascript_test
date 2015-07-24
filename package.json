@@ -1,0 +1,37 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "Project UI for Norwegian Polar Institute",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://srldl@github.com/npolar/project"
+  },
+  "keywords": [
+    "project",
+    "NPI"
+  ],
+  "author": "Siri Uldal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/npolar/project/issues"
+  },
+  "homepage": "https://github.com/npolar/project",
+  "devDependencies": {
+    "browserify": "^11.0.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-shell": "^0.4.2",
+    "gulp-uglify": "^1.2.0",
+    "underscore": "^1.8.3"
+  },
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "underscore": "^1.8.3"
+  }
+}
