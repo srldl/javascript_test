@@ -1,42 +1,28 @@
 {
   "name": "javascript_test",
   "version": "1.0.0",
-  "description": "Testing gulp and browserify",
-  "main": "index.js",
+  "description": "Environment for javascript programming",
+  "main": "gulpfile.js",
   "scripts": {
-    "start": "node index",
-    "lint": "jshint **"
+    "start": "http-server -a vimsa.npolar.no -p 8000 -c-1",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://srldl@github.com/srldl/javascript_test"
+    "url": "git+https://github.com/srldl/javascript_test.git"
   },
   "keywords": [
-    "browserify",
-    "gulp"
+    "repeating",
+    "fields"
   ],
-  "author": "Siri Uldal",
+  "author": "srldl",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/srldl/javascript_test/issues"
   },
-  "homepage": "https://github.com/srldl/javascript_test",
+  "homepage": "https://github.com/srldl/javascript_test#readme",
   "devDependencies": {
-    "browserify": "^11.0.0",
-    "gulp": "^3.9.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-jshint": "^1.11.2",
-    "gulp-load-plugins": "^1.0.0-rc.1",
-    "gulp-shell": "^0.4.2",
-    "gulp-uglify": "^1.2.0",
-    "underscore": "^1.8.3",
-    "uniq": "^1.0.1"
-  },
-  "dependencies": {
-    "angular": "^1.4.3",
-    "angular-route": "^1.4.3"
-  },
-  "script": {
-    "start": "node server.js"
+    "browserify": "^11.0.1",
+    "gulp": "^3.9.0"
   }
 }
