@@ -1,1 +1,1 @@
-This package is a base for gulp/browserify/angular projects.
+Test for maps with gulp/browserify/angular using leaflet.
