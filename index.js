@@ -4,7 +4,6 @@ var angular = require('angular');
 
 var appMap_test = angular.module('map_test',[]);
 
-
 // require leaflet.js
 var L = require('leaflet');
 
