@@ -2,63 +2,69 @@
 
 var angular = require('angular');
 
-var appMap_test = angular.module('map_test',[]);
-
-// require leaflet.js
-var L = require('leaflet');
-require('leaflet-draw');
-
-// specify the path to the leaflet images folder
-L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/'
-
-// create a map in the "map" div, set the view to a given place and zoom
-var map = L.map('map', {drawControl: true}).setView([78.000, 16.000], 4);
-
-// add an OpenStreetMap tile layer
-L.tileLayer('http://tilestream.data.npolar.no/v2/WorldHax/{z}/{x}/{y}.png', {
-   attribution: 'Norwegian Polar Institute'
-}).addTo(map);
-
-// Initialize the FeatureGroup to store editable layers
-var drawnItems = new L.FeatureGroup();
-map.addLayer(drawnItems);
-
-// Initialize the draw control and pass it the FeatureGroup of editable layers
-var drawControl = new L.Control.Draw({
-   edit: {
-       featureGroup: drawnItems
-   }
-});
-map.addControl(drawControl);
+var map_test = angular.module('map_test',[]);
 
 
-map.on('draw:created', function (e) {
-    var type = e.layerType,
-        layer = e.layer;
-        console.log("hei");
-        var res = (layer.toGeoJSON()).geometry.coordinates;
+map_test.controller('MapCtrl', function($scope) {
 
-        /*fetch zero and second coordinate pair to get a rectangle */
-        $scope.lat1= res[0][0][0];
-        $scope.lng1= res[0][0][1];
-        $scope.lat2= res[0][2][0];
-        $scope.lng2= res[0][2][1];
+  var L = require('leaflet');
+  L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
+  require('leaflet-draw');
+
+// if (map !== undefined) { map.remove(); console.log("remove");}
+
+  var url = 'http://tilestream.data.npolar.no/v2/WorldHax/{z}/{x}/{y}.png',
+      attrib = '&copy; <a href="http://openstreetmap.org/copyright">Norwegian Polar Institute</a>',
+      tiles = L.tileLayer(url, {maxZoom: 18, attribution: attrib}),
+      map = new L.Map('map', {layers: [tiles], center: new L.LatLng(78.000, 16.000), zoom: 4 });
+
+      var drawnItems = new L.FeatureGroup();
+      map.addLayer(drawnItems);
+
+      var drawControl = new L.Control.Draw({
+        draw: {
+          position: 'topleft',
+          polygon: false,
+          polyline: false,
+          circle: false,
+          marker: false,
+        },
+        edit: {
+          featureGroup: drawnItems
+        }
+      });
+      map.addControl(drawControl);
+
+      //When finishing the drawing catch event
+      map.on('draw:created', function (e) {
+        //Remove previous markers
 
 
-     console.log(res[0][0][0]);
-    if (type === 'marker') {
-        // Do marker specific actions
-    }
+        var type = e.layerType,
+          layer = e.layer;
 
-    // Do whatever else you need to. (save to db, add to map etc)
-    drawnItems.addLayer(layer);
-});
+        //When finishing a rectangle, show lat lon in input fields
+        if (type === 'rectangle') {
+          var res = (layer.toGeoJSON()).geometry.coordinates;
 
-map.on('draw:edited', function () {
-    // Update db to save latest changes.
-     console.log("hei");
-});
 
-map.on('draw:deleted', function () {
-    // Update db to save latest changes.
+          var lat1 = res[0][0][0];
+          var lng1 = res[0][0][1];
+          var lat2 = res[0][2][0];
+          var lng2 = res[0][2][1];
+
+           var redIcon = L.icon({
+                iconUrl: 'src/reddot.png',
+                iconSize:     [8, 8] // size of the icon
+            });
+
+
+       var marker1 = L.marker([lng1, lat1], {icon: redIcon}).addTo(map).bindPopup("1.").openPopup();
+       var marker2 = L.marker([lng2, lat2], {icon: redIcon}).addTo(map).bindPopup("2.").openPopup();
+
+        var markers =  L.layerGroup([marker1,marker2]);
+      }
+  });
+
+
 });
