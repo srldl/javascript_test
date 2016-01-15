@@ -1,1 +1,1 @@
-Test for maps with gulp/browserify/angular using leaflet.
+Create map directive with browserify/angular using leaflet.
