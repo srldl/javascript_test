@@ -38909,6 +38909,8 @@ L.Map.include({
 },{}],8:[function(require,module,exports){
 var MapCtrl =  function($scope, $controller) {
 
+  //var editable = 'true';
+  $scope.geoJson = "nope";
 };
 
 module.exports = MapCtrl;
@@ -38925,10 +38927,15 @@ var map = function () {
     return {
       restrict: 'E',
       templateUrl: 'src/map.html',
-    /*  scope: {
-          pictures: "="
-      }, */
+      scope: {
+          geoJson: "="
+      //    editable: '@editable',
+      },
       link: function(scope, elem, attrs) {
+
+        //console.log(editable);
+        //console.log(geoJson);
+        console.log("geoJson");
 
         var L = require('leaflet');
         L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
@@ -38961,11 +38968,12 @@ var map = function () {
           marker: {icon:redIcon},
         },
         edit: {
-          featureGroup: drawnItems
-        }
+          featureGroup: drawnItems,
+          remove:true
+       }
       });
 
-      console.log(L);
+      //console.log(L);
 
 
       map.addControl(drawControl);
@@ -38978,17 +38986,17 @@ var map = function () {
 
       //When finishing the drawing catch event
       map.on('draw:created', function (e) {
-
         var type = e.layerType,
-          layer = e.layer;
-          console.log("draw created");
-          console.log(e);
+        layer = e.layer;
+        drawnItems.addLayer(layer);
 
 
         if ((type === 'polygon') || (type === 'rectangle')) {
            //Get coord
            var res = (layer.toGeoJSON()).geometry.coordinates;
+
            console.log(layer.toGeoJSON());
+           console.log("rectangle");
 
            //Lat/lng needs to be reversed
            //last point is already reversed by Leaflet -thus lenght-1
@@ -38999,11 +39007,9 @@ var map = function () {
 
            var polygon1 = new L.Polygon(res[0], {
                 color: 'red',
-                weight: 3 //,
-            //    opacity: 0.5,
-            //    smoothFactor: 1
-
+                weight: 3
            });
+
            polygon1.addTo(map);
 
         };
@@ -39020,10 +39026,7 @@ var map = function () {
 
            var polyline1 = new L.Polyline(res, {
                 color: 'red',
-                weight: 3 //,
-           //     opacity: 0.5,
-           //     smoothFactor: 1
-
+                weight: 3
            });
            polyline1.addTo(map);
 
@@ -39032,16 +39035,12 @@ var map = function () {
 
         if (type === 'circle') {
           //Get coord
-          console.log("circle1");
-          console.log(e.layer._mRadius);
           var res = (layer.toGeoJSON()).geometry.coordinates;
           console.log(layer.toGeoJSON());
           L.circle([res[1], res[0]],e.layer._mRadius,{
                 color: 'red',
                 weight: 3
           }).addTo(map);
-
-          console.log("circle");
         };
 
         if (type === 'marker') {
@@ -39049,28 +39048,49 @@ var map = function () {
           var res = (layer.toGeoJSON()).geometry.coordinates;
           console.log(layer.toGeoJSON());
           var marker1 = L.marker([res[1], res[0]], {icon: redIcon}).addTo(map);
-          //var marker1 = L.marker([res[1], res[0]]).addTo(map);
         };
 
   });
+        //If map is edited
+         map.on('draw:editstart', function (e) {
+            var layers = e.layers;
+              console.log(e);
+              console.log("editstart");
+         });
+
+         //If map is edited
+         map.on('draw:editstop', function (e) {
+            var layers = e.layers;
+              console.log(e);
+              console.log("editstop");
+         });
 
          //If map is edited
          map.on('draw:edited', function (e) {
-
-          console.log('edited');
 
            var layers = e.layers;
            layers.eachLayer(function (layer) {
              //Update lng/lat from search
              var res = (layer.toGeoJSON()).geometry.coordinates;
+             console.log(layer.toGeoJSON());
+             console.log("edited");
 
-               console.log(res);
+       /*      var polygon1 = layer.Polygon(res[0], {
+                color: 'red',
+                weight: 3
+             });
+             polygon1.addTo(map); */
+
+
+             //  console.log(layer.toGeoJSON());
            });
         });
 
         //if map should delete
         map.on('draw:deleted', function (e) {
            console.log("deleted");
+            var layers = e.layers;
+            console.log(e);
         });
 
       }
