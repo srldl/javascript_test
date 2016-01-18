@@ -9,14 +9,18 @@ var L = require('leaflet');
       tiles = L.tileLayer(url, {maxZoom: 18, attribution: attrib}),
       map = new L.Map('map', {layers: [tiles], center: new L.LatLng(78.000, 16.000), zoom: 4 });
 
+      //Initialise the FeatureGroup to store editable layers
       var drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
 
+      console.log("draw!");
       var drawControl = new L.Control.Draw({
+        console.log("draw2!");
         draw: {
           position: 'topleft',
-          polygon: false,
-          polyline: false,
+         /* polygon: true,
+          polyline: true,
+          rectangle: true, */
           circle: false,
           marker: false,
         },
