@@ -12,13 +12,10 @@ var map = function () {
       templateUrl: 'src/map.html',
       scope: {
          mapobj: '=',
-         opt: '@'
+         opt: '='
       }, //isolate the scope
-      link: function(scope, elem, attrs) {
 
-        console.log("editable");
-        console.log(scope);
-        console.log("geoJson");
+      link: function(scope, elem, attrs) {
 
         var L = require('leaflet');
         L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
@@ -26,10 +23,10 @@ var map = function () {
 
     //    var url = 'http://tilestream.data.npolar.no/v2/WorldHax/{z}/{x}/{y}.png',
    //   attrib = '&copy; <a href="http://openstreetmap.org/copyright">Norwegian Polar Institute</a>',
-      var url = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attrib = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      var url = scope.opt.url,
+      attrib = scope.opt.attribute,
       tiles = L.tileLayer(url, {maxZoom: 18, attribution: attrib}),
-      map = new L.Map('map', {layers: [tiles], center: new L.LatLng(78.000, 16.000), zoom: 4 });
+      map = new L.Map('map', {layers: [tiles], center: new L.LatLng(scope.opt.lat, scope.opt.lng), zoom: 4 });
 
       var drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
@@ -40,20 +37,33 @@ var map = function () {
                 iconSize:     [8, 8] // size of the icon
       });
 
+      //Set markers to false (remove) or alternative options
+      if (scope.opt.edits[4] == false ) {
+         var marker1 = false;
+      } else {
+         var marker1 = {icon:redIcon};
+      };
+
+      //Set edit to false or alternative options
+       if (scope.opt.edits[0] == scope.opt.edits[1] == scope.opt.edits[2] == scope.opt.edits[3] == scope.opt.edits[4] == false) {
+         var edit1 = false;
+      } else {
+         var edit1 = { featureGroup: drawnItems, remove:true }
+      };
 
       var drawControl = new L.Control.Draw({
         draw: {
           position: 'topleft',
-          polygon: true,
-          polyline: true,
-          rectangle: true,
-          circle: true,
-          marker: {icon:redIcon},
+          polygon: scope.opt.edits[0],
+          polyline: scope.opt.edits[1],
+          rectangle: scope.opt.edits[2],
+          circle: scope.opt.edits[3],
+          marker: marker1
         },
-        edit: {
+        edit: edit1 /* {
           featureGroup: drawnItems,
           remove:true
-       }
+       } */
       });
 
       //console.log(L);
