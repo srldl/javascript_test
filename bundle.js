@@ -38910,7 +38910,22 @@ L.Map.include({
 var MapCtrl =  function($scope, $controller) {
 
   //var editable = 'true';
-  $scope.geoJson = "nope";
+  options = new Object();
+  options.edits = [false, false, true, false, false];
+  options.lng = 16.000;
+  options.lat = 78.000;
+  mapobj = [{
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [16.000, 78.000]
+  },
+  "properties": {
+    "name": "Svalbard"
+  }
+}];
+  $scope.opt = options;
+  $scope.mapobj = mapobj;
 };
 
 module.exports = MapCtrl;
@@ -38925,16 +38940,16 @@ var map = function () {
     L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
     return {
-      restrict: 'E',
+      restrict: 'AE',
       templateUrl: 'src/map.html',
       scope: {
-          geoJson: "="
-      //    editable: '@editable',
-      },
+         mapobj: '=',
+         opt: '@'
+      }, //isolate the scope
       link: function(scope, elem, attrs) {
 
-        //console.log(editable);
-        //console.log(geoJson);
+        console.log("editable");
+        console.log(scope);
         console.log("geoJson");
 
         var L = require('leaflet');

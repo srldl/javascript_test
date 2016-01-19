@@ -8,16 +8,16 @@ var map = function () {
     L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
     return {
-      restrict: 'E',
+      restrict: 'AE',
       templateUrl: 'src/map.html',
       scope: {
-          geoJson: "="
-      //    editable: '@editable',
-      },
+         mapobj: '=',
+         opt: '@'
+      }, //isolate the scope
       link: function(scope, elem, attrs) {
 
-        //console.log(editable);
-        //console.log(geoJson);
+        console.log("editable");
+        console.log(scope);
         console.log("geoJson");
 
         var L = require('leaflet');
