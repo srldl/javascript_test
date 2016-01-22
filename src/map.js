@@ -21,6 +21,19 @@ var map = function () {
       L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
       require('leaflet-draw');
 
+      //Default markers are too big for many coord, use a small marker instead.
+      var redIcon = L.icon({
+                iconUrl: 'src/reddot.png',
+                iconSize:     [8, 8] // size of the icon
+      });
+
+       //Input default markers are too big for many coord, use a small marker instead.
+      var blueIcon = L.icon({
+                iconUrl: 'src/bluedot.png',
+                iconSize:     [8, 8] // size of the icon
+      });
+
+
       var url = scope.opt.url,
       attrib = scope.opt.attribute,
       tiles = L.tileLayer(url, {maxZoom: 18, attribution: attrib}),
@@ -28,12 +41,6 @@ var map = function () {
 
       var drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
-
-      //Default markers are too big for many coord, use a small marker instead.
-      var redIcon = L.icon({
-                iconUrl: 'src/reddot.png',
-                iconSize:     [8, 8] // size of the icon
-      });
 
       //Set markers to false (remove if there are no markers) or view with small red icons.
       var marker1 = null;
