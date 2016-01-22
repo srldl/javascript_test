@@ -80,11 +80,9 @@ var map = function () {
       map.on('draw:created', function (e) {
         var type = e.layerType,
         layer = e.layer;
-        drawnItems.addLayer(layer);
         var res = null;
 
-
-        if ((type === 'polygon') || (type === 'rectangle')) {
+        if (type === 'rectangle') {
            //Get coord
            res = (layer.toGeoJSON()).geometry.coordinates;
 
@@ -97,13 +95,33 @@ var map = function () {
                res[0][i] = res[0][i].reverse();
            }
 
+           var rectangle1 = new L.Rectangle(res[0], {
+                color: 'red',
+                weight: 3
+           });
+
+           layer = rectangle1.addTo(map);
+        }
+
+        if (type === 'polygon') {
+           //Get coord
+           res = (layer.toGeoJSON()).geometry.coordinates;
+
+           console.log(layer.toGeoJSON());
+           console.log("polygon");
+
+           //Lat/lng needs to be reversed
+           //last point is already reversed by Leaflet -thus lenght-1
+           for (var i=0;i<(res[0].length-1);i++) {
+               res[0][i] = res[0][i].reverse();
+           }
 
            var polygon1 = new L.Polygon(res[0], {
                 color: 'red',
                 weight: 3
            });
 
-           polygon1.addTo(map);
+           layer = polygon1.addTo(map);
 
         }
 
@@ -121,7 +139,7 @@ var map = function () {
                 color: 'red',
                 weight: 3
            });
-           polyline1.addTo(map);
+           layer = polyline1.addTo(map);
            }
 
 
@@ -129,7 +147,7 @@ var map = function () {
           //Get coord
           res = (layer.toGeoJSON()).geometry.coordinates;
           console.log(layer.toGeoJSON());
-          L.circle([res[1], res[0]],e.layer._mRadius,{
+          layer = L.circle([res[1], res[0]],e.layer._mRadius,{
                 color: 'red',
                 weight: 3
           }).addTo(map);
@@ -139,23 +157,13 @@ var map = function () {
           //Get coord
           res = (layer.toGeoJSON()).geometry.coordinates;
           console.log(layer.toGeoJSON());
-          L.marker([res[1], res[0]], {icon: redIcon}).addTo(map);
+          layer =  L.marker([res[1], res[0]], {icon: redIcon}).addTo(map);
         }
 
-  });
-        //If map is edited
-         map.on('draw:editstart', function (e) {
-           // var layers = e.layers;
-              console.log(e);
-              console.log("editstart");
-         });
 
-         //If map is edited
-         map.on('draw:editstop', function (e) {
-           // var layers = e.layers;
-              console.log(e);
-              console.log("editstop");
-         });
+        drawnItems.addLayer(layer);
+
+  });
 
          //If map is edited
          map.on('draw:edited', function (e) {
@@ -166,15 +174,6 @@ var map = function () {
             // var res = (layer.toGeoJSON()).geometry.coordinates;
              console.log(layer.toGeoJSON());
              console.log("edited");
-
-       /*      var polygon1 = layer.Polygon(res[0], {
-                color: 'red',
-                weight: 3
-             });
-             polygon1.addTo(map); */
-
-
-             //  console.log(layer.toGeoJSON());
            });
         });
 
