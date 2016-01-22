@@ -17,12 +17,10 @@ var map = function () {
 
       link: function(scope, elem, attrs) {
 
-        var L = require('leaflet');
-        L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
-        require('leaflet-draw');
+      var L = require('leaflet');
+      L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
+      require('leaflet-draw');
 
-    //    var url = 'http://tilestream.data.npolar.no/v2/WorldHax/{z}/{x}/{y}.png',
-   //   attrib = '&copy; <a href="http://openstreetmap.org/copyright">Norwegian Polar Institute</a>',
       var url = scope.opt.url,
       attrib = scope.opt.attribute,
       tiles = L.tileLayer(url, {maxZoom: 18, attribution: attrib}),
@@ -37,7 +35,7 @@ var map = function () {
                 iconSize:     [8, 8] // size of the icon
       });
 
-      //Set markers to false (remove) or alternative options
+      //Set markers to false (remove if there are no markers) or view with small red icons.
       var marker1 = null;
       if (scope.opt.edits[4] === false ) {
          marker1 = false;
@@ -45,7 +43,7 @@ var map = function () {
          marker1 = {icon:redIcon};
       }
 
-      //Set edit to false or alternative options
+      //Set edit to false (if edit should not be shown) or set it to featuregroup to show edit and delete.
        var edit1 = null;
        if (scope.opt.edits[0] === scope.opt.edits[1] === scope.opt.edits[2] === scope.opt.edits[3] === scope.opt.edits[4] === false) {
          edit1 = false;
@@ -66,6 +64,17 @@ var map = function () {
       });
 
       map.addControl(drawControl);
+
+
+     console.log("for add");
+     console.log(scope.mapobj);
+
+      //is existing, add incoming layers to map
+      var inputLayer = L.geoJson().addTo(map);
+      if  (scope.mapobj) {
+         inputLayer.addData(scope.mapobj);
+      }
+
 
       //When finishing the drawing catch event
       map.on('draw:created', function (e) {
