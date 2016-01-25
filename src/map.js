@@ -23,17 +23,11 @@ var map = function () {
 
       //Default markers are too big for many coord, use a small marker instead.
       var redIcon = L.icon({
-                iconUrl: 'src/reddot.png',
-                iconSize:     [8, 8] // size of the icon
+                iconUrl: 'src/marker2.png',
+                iconSize: [54, 54] // size of the icon
       });
 
-       //Input default markers are too big for many coord, use a small marker instead.
-      var blueIcon = L.icon({
-                iconUrl: 'src/bluedot.png',
-                iconSize:     [8, 8] // size of the icon
-      });
-
-
+      //Set base map, center
       var url = scope.opt.url,
       attrib = scope.opt.attribute,
       tiles = L.tileLayer(url, {maxZoom: 18, attribution: attrib}),
@@ -42,7 +36,7 @@ var map = function () {
       var drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
 
-      //Set markers to false (remove if there are no markers) or view with small red icons.
+      //Remove markers if none or view with small red icons.
       var marker1 = null;
       if (scope.opt.edits[4] === false ) {
          marker1 = false;
@@ -50,7 +44,7 @@ var map = function () {
          marker1 = {icon:redIcon};
       }
 
-      //Set edit to false (if edit should not be shown) or set it to featuregroup to show edit and delete.
+      //Deactivate edit or set it to featuregroup to show edit and delete.
        var edit1 = null;
        if (scope.opt.edits[0] === scope.opt.edits[1] === scope.opt.edits[2] === scope.opt.edits[3] === scope.opt.edits[4] === false) {
          edit1 = false;
@@ -58,6 +52,7 @@ var map = function () {
          edit1 = { featureGroup: drawnItems, remove:true };
       }
 
+      //Create a draw control
       var drawControl = new L.Control.Draw({
         draw: {
           position: 'topleft',
@@ -72,14 +67,10 @@ var map = function () {
 
       map.addControl(drawControl);
 
-
-     console.log("for add");
-     console.log(scope.mapobj);
-
-      //is existing, add incoming layers to map
       var inputLayer = L.geoJson().addTo(map);
+
       if  (scope.mapobj) {
-         inputLayer.addData(scope.mapobj);
+              inputLayer.addData(scope.mapobj);
       }
 
 
@@ -93,8 +84,9 @@ var map = function () {
            //Get coord
            res = (layer.toGeoJSON()).geometry.coordinates;
 
-           console.log(layer.toGeoJSON());
            console.log("rectangle");
+           (scope.mapobj).push(layer.toGeoJSON());
+
 
            //Lat/lng needs to be reversed
            //last point is already reversed by Leaflet -thus lenght-1
@@ -116,6 +108,7 @@ var map = function () {
 
            console.log(layer.toGeoJSON());
            console.log("polygon");
+           (scope.mapobj).push(layer.toGeoJSON());
 
            //Lat/lng needs to be reversed
            //last point is already reversed by Leaflet -thus lenght-1
@@ -135,7 +128,7 @@ var map = function () {
         if (type === 'polyline') {
            //Get coord
            res = (layer.toGeoJSON()).geometry.coordinates;
-           console.log(layer.toGeoJSON());
+           (scope.mapobj).push(layer.toGeoJSON());
 
           //Lat/lng needs to be reversed
            for (var j=0;j<res.length;j++) {
@@ -153,7 +146,8 @@ var map = function () {
         if (type === 'circle') {
           //Get coord
           res = (layer.toGeoJSON()).geometry.coordinates;
-          console.log(layer.toGeoJSON());
+          (scope.mapobj).push(layer.toGeoJSON());
+
           layer = L.circle([res[1], res[0]],e.layer._mRadius,{
                 color: 'red',
                 weight: 3
@@ -163,8 +157,10 @@ var map = function () {
         if (type === 'marker') {
           //Get coord
           res = (layer.toGeoJSON()).geometry.coordinates;
-          console.log(layer.toGeoJSON());
+          (scope.mapobj).push(layer.toGeoJSON());
+
           layer =  L.marker([res[1], res[0]], {icon: redIcon}).addTo(map);
+         // layer =  L.marker([res[1], res[0]]).addTo(map);
         }
 
 
