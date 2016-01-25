@@ -23,7 +23,7 @@ var map = function () {
 
       //Default markers are too big for many coord, use a small marker instead.
       var redIcon = L.icon({
-                iconUrl: 'src/marker2.png',
+                iconUrl: 'src/img/marker2.png',
                 iconSize: [54, 54] // size of the icon
       });
 
