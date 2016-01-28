@@ -23,7 +23,7 @@ var MapService = function() {
             ]
       },
       "properties": {
-      "name": "Svalbard2"
+      "name": "Svalbard"
     }
     },
     {
@@ -35,13 +35,17 @@ var MapService = function() {
       ]  ]
     },
     "properties": {
-      "name": "Svalbard3"
+      "name": "Svalbard"
     }
     } ]
     }
 
-   console.log(service);
-   return service;
+   return function(place) {
+      for (var i=0;i<place.length;i++) {
+          (service.mapobjects).push(place[i]);
+      }
+     return service;
+  }
 
 
 };

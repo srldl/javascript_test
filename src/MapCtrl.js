@@ -3,7 +3,7 @@
 var MapCtrl =  function($scope, $controller, MapService) {
 
 
-  var place = [{
+  /*var place = [{
     "type": "Feature",
     "geometry": {
       "type": "Point",
@@ -12,11 +12,12 @@ var MapCtrl =  function($scope, $controller, MapService) {
     "properties": {
       "name": "Sval"
     }
-}]
+  }] */
 
+  var place = [];
 
-  console.log("--mapobj--");
-  console.log(MapService);
+ //MapService(place) is an object, mapobjects is a geojson array
+  $scope.mapobj = MapService(place).mapobjects;
 
   var opt = {};
   opt.edits = [true, true, true, true, true];
