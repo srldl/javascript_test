@@ -3,20 +3,20 @@
 var MapCtrl =  function($scope, $controller, MapService) {
 
 
-  console.log($scope);
-  var map = [{
-  "type": "Feature",
-  "geometry": {
-    "type": "LineString",
-    "coordinates": [
-            [17.000, 79.000], [18.56, 79.89], [17.56, 78.67], [18.78, 79.45]
-            ]
-  },
-  "properties": {
-    "name": "Svalbard77"
-  }}];
+  var place = [{
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [17.000, 80.000]
+    },
+    "properties": {
+      "name": "Sval"
+    }
+}]
 
-  $scope.mapobj = MapService(map);
+
+  console.log("--mapobj--");
+  console.log(MapService);
 
   var opt = {};
   opt.edits = [true, true, true, true, true];
