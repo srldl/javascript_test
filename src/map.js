@@ -1,9 +1,8 @@
 'use strict';
 
-/**
- * @ngInject
- */
-var map = function () {
+
+var map = function (MapService) {
+    'ngInject';
     var L = require('leaflet');
     L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
@@ -81,15 +80,11 @@ var map = function () {
         var res = null;
 
         if (type === 'rectangle') {
-           //Get coord
-           res = (layer.toGeoJSON()).geometry.coordinates;
-
-           console.log("rectangle");
-           (scope.mapobj).push(layer.toGeoJSON());
-
 
            //Lat/lng needs to be reversed
            //last point is already reversed by Leaflet -thus lenght-1
+           res = (layer.toGeoJSON()).geometry.coordinates;
+
            for (var i=0;i<(res[0].length-1);i++) {
                res[0][i] = res[0][i].reverse();
            }
@@ -100,15 +95,12 @@ var map = function () {
            });
 
            layer = rectangle1.addTo(map);
+
         }
 
         if (type === 'polygon') {
            //Get coord
            res = (layer.toGeoJSON()).geometry.coordinates;
-
-           console.log(layer.toGeoJSON());
-           console.log("polygon");
-           (scope.mapobj).push(layer.toGeoJSON());
 
            //Lat/lng needs to be reversed
            //last point is already reversed by Leaflet -thus lenght-1
@@ -122,13 +114,13 @@ var map = function () {
            });
 
            layer = polygon1.addTo(map);
+           console.log("polygon");
 
         }
 
         if (type === 'polyline') {
            //Get coord
            res = (layer.toGeoJSON()).geometry.coordinates;
-           (scope.mapobj).push(layer.toGeoJSON());
 
           //Lat/lng needs to be reversed
            for (var j=0;j<res.length;j++) {
@@ -146,7 +138,6 @@ var map = function () {
         if (type === 'circle') {
           //Get coord
           res = (layer.toGeoJSON()).geometry.coordinates;
-          (scope.mapobj).push(layer.toGeoJSON());
 
           layer = L.circle([res[1], res[0]],e.layer._mRadius,{
                 color: 'red',
@@ -157,20 +148,22 @@ var map = function () {
         if (type === 'marker') {
           //Get coord
           res = (layer.toGeoJSON()).geometry.coordinates;
-          (scope.mapobj).push(layer.toGeoJSON());
 
           layer =  L.marker([res[1], res[0]], {icon: redIcon}).addTo(map);
-         // layer =  L.marker([res[1], res[0]]).addTo(map);
         }
 
 
         drawnItems.addLayer(layer);
 
+        //convert coord to geoJson obj
+        var coord = (layer.toGeoJSON()).geometry.coordinates;
+        var geoJsonObj = getJsonObj(type, coord);
+        MapService(geoJsonObj).mapobjects;
+
   });
 
-         //If map is edited
-         map.on('draw:edited', function (e) {
-
+        //If map is edited
+        map.on('draw:edited', function (e) {
            var layers = e.layers;
            layers.eachLayer(function (layer) {
              //Update lng/lat from search
@@ -186,9 +179,33 @@ var map = function () {
           //  var layers = e.layers;
             console.log(e);
         });
-
       }
   };
+
+    //Convert coord into a full geoJSON object
+      function getJsonObj(type, coord) {
+
+        //Rectangle is a polygon according to geoJSON
+        if (type == 'rectangle'){ type = 'polygon'};
+
+        var json = [{
+           "type": "Feature",
+           "geometry": {
+           "type": "",
+           "coordinates": []
+           },
+           "properties": {
+           "name": "Svalbard"}
+        }];
+
+        json[0].geometry.type = type;
+        json[0].geometry.coordinates = coord;
+
+        console.log(type);
+        console.log(json);
+        return json;
+      };
+
 };
 
 

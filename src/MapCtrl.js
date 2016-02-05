@@ -3,21 +3,50 @@
 var MapCtrl =  function($scope, $controller, MapService) {
 
 
-  /*var place = [{
-    "type": "Feature",
-    "geometry": {
-      "type": "Point",
-      "coordinates": [17.000, 80.000]
+  var places = [{
+       "type": "Feature",
+       "geometry": {
+       "type": "Point",
+       "coordinates": [16.000, 78.000]
+     },
+       "properties": {
+       "name": "Svalbard"
+    }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+      "type": "LineString",
+      "coordinates": [
+            [16.000, 78.000], [18.56, 79.89], [17.56, 78.67], [18.78, 79.45]
+            ]
+      },
+      "properties": {
+      "name": "Svalbard"
+    }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+      "type": "Polygon",
+      "coordinates": [ [
+            [20.000, 88.000], [18.56, 79.89], [17.56, 78.67], [18.78, 79.45], [20.000, 88.000]
+      ]  ]
     },
     "properties": {
-      "name": "Sval"
+      "name": "Svalbard77"
     }
-  }] */
+    } ];
 
-  var place = [];
+
+
+
 
  //MapService(place) is an object, mapobjects is a geojson array
-  $scope.mapobj = MapService(place).mapobjects;
+  //var place = [];
+  $scope.mapobj = MapService(places).mapobjects;
+  console.log ("ctrl");
+  console.log(JSON.stringify($scope.mapobj));
 
   var opt = {};
   opt.edits = [true, true, true, true, true];
@@ -29,6 +58,13 @@ var MapCtrl =  function($scope, $controller, MapService) {
 
   $scope.opt = opt;
 
+  $scope.$watch(function () {
+       return MapService.mapobjects;
+     },
+      function(newVal, oldVal) {
+        console.log(newVal);
+        console.log(oldVal);
+  }, true);
 
 };
 
