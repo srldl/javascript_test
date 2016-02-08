@@ -58,13 +58,14 @@ var MapCtrl =  function($scope, $controller, MapService) {
 
   $scope.opt = opt;
 
-  $scope.$watch(function () {
+/*  $scope.$watch(function () {
        return MapService.mapobjects;
      },
       function(newVal, oldVal) {
+        console.log("values out");
         console.log(newVal);
         console.log(oldVal);
-  }, true);
+  }, true); */
 
 };
 

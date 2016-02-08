@@ -132,12 +132,14 @@ var map = function (MapService) {
                 weight: 3
            });
            layer = polyline1.addTo(map);
-           }
+        }
 
-
+        //radius is not part of geoJSON - added as part  of properties
+        var radius;
         if (type === 'circle') {
           //Get coord
           res = (layer.toGeoJSON()).geometry.coordinates;
+          radius = e.layer._mRadius;
 
           layer = L.circle([res[1], res[0]],e.layer._mRadius,{
                 color: 'red',
@@ -152,12 +154,12 @@ var map = function (MapService) {
           layer =  L.marker([res[1], res[0]], {icon: redIcon}).addTo(map);
         }
 
-
         drawnItems.addLayer(layer);
 
-        //convert coord to geoJson obj
+        //convert coord to geoJson obj and add to Mapservice obj
+        console.log(layer);
         var coord = (layer.toGeoJSON()).geometry.coordinates;
-        var geoJsonObj = getJsonObj(type, coord);
+        var geoJsonObj = getJsonObj(type, coord, radius);
         MapService(geoJsonObj).mapobjects;
 
   });
@@ -165,6 +167,8 @@ var map = function (MapService) {
         //If map is edited
         map.on('draw:edited', function (e) {
            var layers = e.layers;
+            console.log("edited1");
+           console.log(layers);
            layers.eachLayer(function (layer) {
              //Update lng/lat from search
             // var res = (layer.toGeoJSON()).geometry.coordinates;
@@ -183,10 +187,17 @@ var map = function (MapService) {
   };
 
     //Convert coord into a full geoJSON object
-      function getJsonObj(type, coord) {
+    function getJsonObj(type, coord, radius) {
 
         //Rectangle is a polygon according to geoJSON
-        if (type == 'rectangle'){ type = 'polygon'};
+        switch(type) {
+          case 'rectangle':
+            type = 'polygon'; break;
+          case 'circle':
+            type = 'point'; break;
+          case 'marker':
+            type = 'point'; break;
+        };
 
         var json = [{
            "type": "Feature",
@@ -195,16 +206,20 @@ var map = function (MapService) {
            "coordinates": []
            },
            "properties": {
-           "name": "Svalbard"}
+           "name": "Svalbard"
+          }
         }];
+
+        //Add radius if it is a circle
+        if (radius !== undefined) {
+           json[0].properties.radius = radius;
+        }
 
         json[0].geometry.type = type;
         json[0].geometry.coordinates = coord;
 
-        console.log(type);
-        console.log(json);
         return json;
-      };
+    };
 
 };
 
