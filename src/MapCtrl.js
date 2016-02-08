@@ -67,6 +67,7 @@ var MapCtrl =  function($scope, $controller, MapService) {
         console.log(oldVal);
   }, true); */
 
+
 };
 
 module.exports = MapCtrl;

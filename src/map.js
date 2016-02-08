@@ -221,6 +221,11 @@ var map = function (MapService) {
         return json;
     };
 
+
+    function save() {
+      console.log("save");
+    }
+
 };
 
 
