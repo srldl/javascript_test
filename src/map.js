@@ -10,7 +10,6 @@ var map = function (MapService) {
       restrict: 'AE',
       templateUrl: 'src/map.html',
       scope: {
-         mapobj: '=',
          opt: '='
       }, //isolate the scope
 
@@ -68,9 +67,11 @@ var map = function (MapService) {
 
       var inputLayer = L.geoJson().addTo(map);
 
-      if  (scope.mapobj) {
-              inputLayer.addData(scope.mapobj);
-      }
+      //Plot input geoJSON
+ //     if  (scope.mapobj) {
+              var initMap = MapService.getJSON();
+              inputLayer.addData(initMap[0].mapobjects);
+ //     }
 
 
       //When finishing the drawing catch event
@@ -157,11 +158,12 @@ var map = function (MapService) {
         drawnItems.addLayer(layer);
 
         //convert coord to geoJson obj and add to Mapservice obj
-        console.log(layer);
+       // console.log(layer);
         var coord = (layer.toGeoJSON()).geometry.coordinates;
         var geoJsonObj = getJsonObj(type, coord, radius);
-        MapService(geoJsonObj).mapobjects;
-
+        //MapService(geoJsonObj).mapobjects;
+        console.log('geoJsonObj', JSON.stringify(geoJsonObj));
+        MapService.setJSON(geoJsonObj);
   });
 
         //If map is edited
@@ -222,9 +224,7 @@ var map = function (MapService) {
     };
 
 
-    function save() {
-      console.log("save");
-    }
+
 
 };
 

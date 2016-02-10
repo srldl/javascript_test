@@ -13,4 +13,4 @@ var app = angular.module('map_test',[
 
 app.controller('MapCtrl', require('./src/MapCtrl'));
 app.directive('map', require('./src/map'));
-app.service('MapService', require('./src/MapService'));
+app.factory('MapService', require('./src/MapService'));

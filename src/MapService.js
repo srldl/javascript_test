@@ -6,14 +6,18 @@ var MapService = function() {
    var service = {};
    service.mapobjects = [];
 
-   return function(places) {
-      for (var i=0;i<places.length;i++) {
+   return {
+     getJSON: function() {
+       return [service];
+   },
+     setJSON: function(places) {
+         for (var i=0;i<places.length;i++) {
           (service.mapobjects).push(places[i]);
-      }
-     console.log("service: " + JSON.stringify(service));
-     return service;
-  }
-
+          }
+         console.log("service: " + JSON.stringify(service));
+        return [service];
+    }
+  };
 
 };
 

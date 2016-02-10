@@ -38,16 +38,11 @@ var MapCtrl =  function($scope, $controller, MapService) {
     }
     } ];
 
+  //Initiate the geojson object
+  MapService.setJSON(places);
 
 
-
-
- //MapService(place) is an object, mapobjects is a geojson array
-  //var place = [];
-  $scope.mapobj = MapService(places).mapobjects;
-  console.log ("ctrl");
-  console.log(JSON.stringify($scope.mapobj));
-
+  //Input attributes
   var opt = {};
   opt.edits = [true, true, true, true, true];
   opt.lng = 16.000;
@@ -58,15 +53,13 @@ var MapCtrl =  function($scope, $controller, MapService) {
 
   $scope.opt = opt;
 
-/*  $scope.$watch(function () {
-       return MapService.mapobjects;
-     },
-      function(newVal, oldVal) {
-        console.log("values out");
-        console.log(newVal);
-        console.log(oldVal);
-  }, true); */
+  //Fetch objects to controller
+  $scope.submit = function() {
 
+    //  var mapobj = MapService().mapobjects;
+      var mapobj = MapService.getJSON();
+      console.log("mapobj in controller:", JSON.stringify(mapobj));
+  }
 
 };
 
