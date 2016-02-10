@@ -68,16 +68,15 @@ var map = function (MapService) {
       var inputLayer = L.geoJson().addTo(map);
 
       //Plot input geoJSON
- //     if  (scope.mapobj) {
-              var initMap = MapService.getJSON();
-              inputLayer.addData(initMap[0].mapobjects);
- //     }
+      var initMap = MapService.getJSON();
+      inputLayer.addData(initMap[0].mapobjects);
 
 
       //When finishing the drawing catch event
       map.on('draw:created', function (e) {
         var type = e.layerType,
         layer = e.layer;
+
         var res = null;
 
         if (type === 'rectangle') {
@@ -115,8 +114,6 @@ var map = function (MapService) {
            });
 
            layer = polygon1.addTo(map);
-           console.log("polygon");
-
         }
 
         if (type === 'polyline') {
@@ -155,41 +152,55 @@ var map = function (MapService) {
           layer =  L.marker([res[1], res[0]], {icon: redIcon}).addTo(map);
         }
 
-        drawnItems.addLayer(layer);
+        var createLayer = drawnItems.addLayer(layer);
+
+
+        //The id is the last property of createLayer._layers object
+        //We need this id if object is edited
+        var lastProp = (Object.keys(createLayer._layers).length)-1;
+        var id = Object.keys(createLayer._layers)[lastProp];
 
         //convert coord to geoJson obj and add to Mapservice obj
-       // console.log(layer);
         var coord = (layer.toGeoJSON()).geometry.coordinates;
-        var geoJsonObj = getJsonObj(type, coord, radius);
-        //MapService(geoJsonObj).mapobjects;
-        console.log('geoJsonObj', JSON.stringify(geoJsonObj));
+        var geoJsonObj = getJsonObj(type, coord, id, radius);
         MapService.setJSON(geoJsonObj);
   });
 
-        //If map is edited
+        //If map is edited, remove old geoJSON and replace with a new with
+        //same id and type, new coord and radius if changed.
         map.on('draw:edited', function (e) {
+           var type = e.layerType;
            var layers = e.layers;
-            console.log("edited1");
-           console.log(layers);
+           var radius;
+
            layers.eachLayer(function (layer) {
-             //Update lng/lat from search
-            // var res = (layer.toGeoJSON()).geometry.coordinates;
-             console.log(layer.toGeoJSON());
-             console.log("edited");
+
+              //Remove old feature in geoJson object
+              var type = MapService.delJSON(layer._leaflet_id);
+              var coord = (layer.toGeoJSON()).geometry.coordinates;
+
+              if (type === 'circle') { var radius = layer._mRadius; }
+              var geoJsonObj = getJsonObj(type, coord, layer._leaflet_id, radius);
+              MapService.setJSON(geoJsonObj);
            });
         });
 
-        //if map should delete
+        //if delete is used, delete object also in geoJSON.
         map.on('draw:deleted', function (e) {
-           console.log("deleted");
-          //  var layers = e.layers;
-            console.log(e);
+            var layers = e.layers._layers;
+
+            var max = Object.keys(layers).length;
+            //Remove old feature in geoJson object
+            for (var i=0;i<max;i++) {
+                var id = Object.keys(layers)[i];
+                MapService.delJSON(id);
+            };
         });
       }
   };
 
     //Convert coord into a full geoJSON object
-    function getJsonObj(type, coord, radius) {
+    function getJsonObj(type, coord, id, radius) {
 
         //Rectangle is a polygon according to geoJSON
         switch(type) {
@@ -208,9 +219,12 @@ var map = function (MapService) {
            "coordinates": []
            },
            "properties": {
-           "name": "Svalbard"
+           "id": "0"
           }
         }];
+
+        //Add id
+        json[0].properties.id = id;
 
         //Add radius if it is a circle
         if (radius !== undefined) {
@@ -222,8 +236,6 @@ var map = function (MapService) {
 
         return json;
     };
-
-
 
 
 };

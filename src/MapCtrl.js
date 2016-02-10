@@ -34,7 +34,7 @@ var MapCtrl =  function($scope, $controller, MapService) {
       ]  ]
     },
     "properties": {
-      "name": "Svalbard77"
+      "id": "old"
     }
     } ];
 
