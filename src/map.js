@@ -85,9 +85,10 @@ var map = function (MapService) {
            //last point is already reversed by Leaflet -thus lenght-1
            res = (layer.toGeoJSON()).geometry.coordinates;
 
-           for (var i=0;i<(res[0].length-1);i++) {
+           for (let i=0;i<(res[0].length-1);i++) {
                res[0][i] = res[0][i].reverse();
            }
+
 
            var rectangle1 = new L.Rectangle(res[0], {
                 color: 'red',
@@ -179,7 +180,7 @@ var map = function (MapService) {
               var type = MapService.delJSON(layer._leaflet_id);
               var coord = (layer.toGeoJSON()).geometry.coordinates;
 
-              if (type === 'circle') { var radius = layer._mRadius; }
+              if (layer._mRadius) { var radius = layer._mRadius; }
               var geoJsonObj = getJsonObj(type, coord, layer._leaflet_id, radius);
               MapService.setJSON(geoJsonObj);
            });
@@ -224,7 +225,7 @@ var map = function (MapService) {
         }];
 
         //Add id
-        json[0].properties.id = id;
+        json[0].properties.id = id.toString();
 
         //Add radius if it is a circle
         if (radius !== undefined) {

@@ -24,17 +24,19 @@ var MapService = function() {
         //Find index
         var arrID;
         var max = (service.mapobjects).length;
+        console.log(max);
 
         for (var i=0;i<max;i++) {
              console.log(service.mapobjects[i].properties);
              if ((service.mapobjects[i].properties.id) && (service.mapobjects[i].properties.id === del.toString())) {
+                console.log(i);
                 arrID = i;
              }
         }
 
         //Get object type first
-
-        console.log(service.mapobjects);
+        console.log(arrID);
+        console.log(service.mapobjects[parseInt(arrID)]);
 
         var type = service.mapobjects[parseInt(arrID)].geometry.type;
 
