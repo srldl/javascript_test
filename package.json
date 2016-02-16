@@ -22,14 +22,12 @@
   },
   "homepage": "https://github.com/srldl/map_test#readme",
   "devDependencies": {
-    "browser-sync": "^2.8.2",
-    "browserify": "^11.0.1",
-    "http-server": "^0.8.0",
-    "leaflet-draw": "^0.2.3"
+    "browserify": "^13.0.0",
+    "http-server": "^0.8.5"
   },
   "dependencies": {
-    "angular": "^1.4.4",
-    "angular-resource": "^1.4.8",
-    "leaflet": "^0.7.3"
+    "angular": "^1.5.0",
+    "leaflet": "^0.7.7",
+    "leaflet-draw": "^0.2.3"
   }
 }
