@@ -4,24 +4,25 @@
 var map = function (MapService) {
     'ngInject';
     var L = require('leaflet');
-    L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
+    L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
+
 
     return {
       restrict: 'AE',
-      templateUrl: 'src/map.html',
+      templateUrl: '../src/map.html',
       scope: {
          opt: '='
       }, //isolate the scope
 
       link: function(scope, elem, attrs) {
 
-      var L = require('leaflet');
-      L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
+    //  var L = require('leaflet');
+    //  L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
       require('leaflet-draw');
 
       //Default markers are too big for many coord, use a small marker instead.
       var redIcon = L.icon({
-                iconUrl: 'src/img/marker2.png',
+                iconUrl: '../src/img/marker2.png',
                 iconSize: [54, 54] // size of the icon
       });
 

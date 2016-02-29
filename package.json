@@ -2,7 +2,7 @@
   "name": "map_test",
   "version": "0.0.1",
   "description": "Basic map directive test with browserify",
-  "main": "index.js",
+  "main": "demo/index.js",
   "scripts": {
     "start": "http-server -a vimsa.npolar.no -p 8000 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1"
