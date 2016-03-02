@@ -16,8 +16,6 @@ var mapdraw = function (MapService) {
 
       link: function(scope, elem, attrs) {
 
-    //  var L = require('leaflet');
-    //  L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
       require('leaflet-draw');
 
       //Default markers are too big for many coord, use a small marker instead.
@@ -86,7 +84,7 @@ var mapdraw = function (MapService) {
            //last point is already reversed by Leaflet -thus lenght-1
            res = (layer.toGeoJSON()).geometry.coordinates;
 
-           for (let i=0;i<(res[0].length-1);i++) {
+           for (var i=0;i<(res[0].length-1);i++) {
                res[0][i] = res[0][i].reverse();
            }
 
