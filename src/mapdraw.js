@@ -9,7 +9,7 @@ var mapdraw = function (MapService) {
 
     return {
       restrict: 'AE',
-      templateUrl: '../src/map.html',
+      templateUrl: '../src/mapdraw.html',
       scope: {
          opt: '='
       }, //isolate the scope
