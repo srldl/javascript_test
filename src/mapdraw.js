@@ -1,7 +1,7 @@
 'use strict';
 
 
-var map = function (MapService) {
+var mapdraw = function (MapService) {
     'ngInject';
     var L = require('leaflet');
     L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
@@ -243,4 +243,4 @@ var map = function (MapService) {
 };
 
 
-module.exports = map;
+module.exports = mapdraw;
