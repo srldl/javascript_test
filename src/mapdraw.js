@@ -28,7 +28,7 @@ var mapdraw = function (MapService) {
       var url = scope.opt.url,
       attrib = scope.opt.attribute,
       tiles = L.tileLayer(url, {maxZoom: 18, attribution: attrib}),
-      map = new L.Map('map', {layers: [tiles], center: new L.LatLng(scope.opt.lat, scope.opt.lng), zoom: 4 });
+      map = new L.Map('mapdraw', {layers: [tiles], center: new L.LatLng(scope.opt.lat, scope.opt.lng), zoom: 4 });
 
       var drawnItems = new L.FeatureGroup();
       map.addLayer(drawnItems);
